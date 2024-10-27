@@ -8,6 +8,7 @@
         mode: "0700"
         owner: "{{ borg_user }}"
         group: "{{ borg_group }}"
+      become: true
 
     - name: Add Borgmatic configuration
       ansible.builtin.template:
@@ -16,4 +17,4 @@
         mode: "0600"
         owner: "{{ borg_user }}"
         group: "{{ borg_group }}"
-...
+      become: true

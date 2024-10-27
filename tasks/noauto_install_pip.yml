@@ -11,8 +11,17 @@
       ansible.builtin.package:
         name: "{{ borg_pip_packages }}"
         state: present
+      become: true
 
-    - name: Create virtualenv for borg  # noqa package-latest
+    - name: Init venv path
+      ansible.builtin.file:
+        path: "{{ borg_venv_path }}"
+        state: directory
+        mode: "0755"
+        owner: "{{ ansible_user_id }}"
+      become: true
+
+    - name: Create virtualenv for borg # noqa package-latest
       ansible.builtin.pip:
         name:
           - pip
@@ -45,6 +54,7 @@
           borgmatic "$@"
         dest: /usr/local/bin/borgmatic
         mode: "0755"
+      become: true
 
     - name: Create borg command in /usr/local/bin
       ansible.builtin.copy:
@@ -54,4 +64,4 @@
           borg "$@"
         dest: /usr/local/bin/borg
         mode: "0755"
-...
+      become: true

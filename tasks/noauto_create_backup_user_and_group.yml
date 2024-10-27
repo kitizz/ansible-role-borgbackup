@@ -17,6 +17,7 @@
         comment: "Backup User Account"
         append: true
       register: user_info
+      become: true
 
     - name: Save the user_info, we need them for the home_dir
       ansible.builtin.set_fact:
@@ -31,4 +32,4 @@
         commands:
           - "/opt/borgmatic/bin/borg"
           - "/usr/local/bin/borgmatic -c /etc/borgmatic/{{ borgmatic_config_name }}"
-...
+      become: true

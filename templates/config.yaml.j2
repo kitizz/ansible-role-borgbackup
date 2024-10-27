@@ -175,8 +175,34 @@ consistency:
 # IMPORTANT: All provided commands and scripts are executed with user permissions of borgmatic.
 # Do not forget to set secure permissions on this file as well as on any script listed (chmod 0700) to
 # prevent potential shell injection or privilege escalation.
-hooks:
+{# hooks:
 {% for hook in borgmatic_hooks %}
 {{ hook }}:
 {{ borgmatic_hooks[hook] | to_nice_yaml(indent=4) | indent(4, first=true) }}
+{% endfor %} #}
+
+{# I think the API for setting these changed with v1.8.0 #}
+{# See: https://torsion.org/borgmatic/docs/how-to/add-preparation-and-cleanup-steps-to-backups/ #}
+{% if borgmatic_before_backup %}
+before_backup:
+{% for command in borgmatic_before_backup %}
+    - >
+      {{ command }}
 {% endfor %}
+{% endif %}
+
+{% if borgmatic_after_backup %}
+after_backup:
+{% for command in borgmatic_after_backup %}
+    - >
+      {{ command }}
+{% endfor %}
+{% endif %}
+
+{% if borgmatic_on_error %}
+on_error:
+{% for command in borgmatic_on_error %}
+    - >
+      {{ command }}
+{% endfor %}
+{% endif %}
